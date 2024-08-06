@@ -1,0 +1,100 @@
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "name": "adit",
+    "email": "admin@gmail.com",
+    "password": "123456",
+    "confPassword": "123456",
+    "role": "admin"
+}
+
+####
+//User
+GET http://localhost:3000/users
+
+####
+//User
+GET http://localhost:3000/users/fb9d4ae0-001d-4f73-93c7-66df02c95a76
+
+####
+//Update
+PATCH  http://localhost:3000/users/fb9d4ae0-001d-4f73-93c7-66df02c95a76
+Content-Type: application/json
+
+{
+    "name": "WHox",
+    "email": "whox@gmail.com",
+    "password": "1233456",
+    "confPassword": "1233456",
+    "role": "user"
+}
+
+####
+//User
+DELETE http://localhost:3000/users/fb9d4ae0-001d-4f73-93c7-66df02c95a76
+
+
+####
+//Userlogin
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "email": "admin@gmail.com",
+    "password": "123456"
+}
+
+####
+//Userlogin
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "email": "Whox@gmail.com",
+    "password": "123456"
+}
+
+####
+//Adminlogin
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "email": "admin@gmail.com",
+    "password": "123456"
+}
+
+####
+//User
+GET http://localhost:3000/me
+
+####
+//User
+DELETE http://localhost:3000/logout
+
+###
+//Books
+GET http://localhost:3000/books
+
+###
+//Post Buku
+POST http://localhost:3000/books
+Content-Type: application/json
+
+{
+    "name": "nyamnyam",
+    "penerbit": "nyam company"
+}
+
+###
+//Post Products
+PATCH http://localhost:3000/books/76452180-ea02-48a2-84cc-ab9785a2ca3b
+Content-Type: application/json
+
+{
+    "name": "nyamch",
+    "penerbit": "nyamnyam company"
+}
+
+
