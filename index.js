@@ -20,14 +20,14 @@ const store = new sessionStore({
     db: db
 });
 
-// (async () => {
-//     try {
-//         await db.sync();
-//         console.log('Database synchronized!');
-//     } catch (error) {
-//         console.error('Unable to synchronize the database:', error);
-//     }
-// })();
+(async () => {
+    try {
+        await db.sync();
+        console.log('Database synchronized!');
+    } catch (error) {
+        console.error('Unable to synchronize the database:', error);
+    }
+})();
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
