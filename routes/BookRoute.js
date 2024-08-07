@@ -13,7 +13,7 @@ const router = express.Router();
 
 router.get('/books', getBooks);
 router.get('/books/:id', verifyToken, getBookById);
-router.get('/books/category/:category', verifyToken, getBooksByCategory);
+router.get('/books/category/:category', getBooksByCategory);
 router.post('/books', verifyToken, adminOnly, createBook);
 router.patch('/books/:id', verifyToken, updateBook);
 router.delete('/books/:id', verifyToken, deleteBook);
