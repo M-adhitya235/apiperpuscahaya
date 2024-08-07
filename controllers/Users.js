@@ -1,5 +1,8 @@
+import jwt from 'jsonwebtoken';
 import User from "../models/UserModel.js";
 import argon2 from "argon2";
+
+const JWT_SECRET = 'cahayaperpus'; 
 
 export const getUsers = async (req, res) => {
   try {
@@ -32,12 +35,14 @@ export const getUserById = async (req, res) => {
   }
 };
 
+
 export const createUser = async (req, res) => {
   const { name, user_class, address, phone_number, email, password, confPassword, role } = req.body;
   if (password !== confPassword) return res.status(400).json({ msg: "Password dan Confirm Password tidak cocok" });
-  const hashPassword = await argon2.hash(password);
+  
   try {
-    await User.create({
+    const hashPassword = await argon2.hash(password);
+    const user = await User.create({
       name,
       user_class,
       address,
@@ -46,7 +51,18 @@ export const createUser = async (req, res) => {
       password: hashPassword,
       role,  
     });
-    res.status(201).json({ msg: "Register Berhasil" });
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { uuid: user.uuid, role: user.role },
+      JWT_SECRET,
+      { expiresIn: '1h' } 
+    );
+
+    res.status(201).json({
+      msg: "Register Berhasil",
+      token 
+    });
   } catch (error) {
     res.status(400).json({ msg: error.message });
   }

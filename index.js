@@ -25,15 +25,15 @@ app.use(session({
     saveUninitialized: true,
     store: store,
     cookie: {
-        secure: process.env.NODE_ENV === 'production', // Atur berdasarkan lingkungan
+        secure: process.env.NODE_ENV === 'production', 
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000 // 1 hari
+        maxAge: 24 * 60 * 60 * 1000 
     }
 }));
 
 app.use(cors({
     credentials: true,
-    origin: 'https://perpustakaancahayasmpn1bpp.vercel.app' // Sesuaikan dengan URL frontend
+    origin: 'https://perpustakaancahayasmpn1bpp.vercel.app' 
 }));
 
 app.use(express.json());
