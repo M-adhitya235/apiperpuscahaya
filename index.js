@@ -38,8 +38,12 @@ app.set('trust proxy', 1);
 
 app.use(cors({
     credentials: true,
-    origin: 'https://perpustakaancahayasmpn1bpp.vercel.app' // Pastikan ini menggunakan https
+    origin: 'https://perpustakaancahayasmpn1bpp.vercel.app',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+
 
 app.use(express.json());
 app.use(UserRoute);

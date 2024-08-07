@@ -2,7 +2,6 @@ import User from "../models/UserModel.js";
 
 export const getMembers = async (req, res) => {
     try {
-        // Menggunakan req.userId dari token JWT
         const user = await User.findOne({
             where: {
                 id: req.userId
@@ -18,7 +17,6 @@ export const getMembers = async (req, res) => {
 
 export const getMemberById = async (req, res) => {
     try {
-        // Menggunakan UUID dari parameter
         const member = await User.findOne({
             attributes: ['uuid', 'name', 'user_class', 'address', 'phone_number'],
             where: {
