@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import session from "express-session";
 import dotenv from "dotenv";
-// import db from "./config/Database.js";
 import SequelizeStore from "connect-session-sequelize";
 import UserRoute from "./routes/UserRoute.js";
 import BookRoute from "./routes/BookRoute.js";
@@ -20,28 +19,21 @@ const store = new sessionStore({
     db: db
 });
 
-// (async () => {
-//     try {
-//         await db.sync();
-//         console.log('Database synchronized!');
-//     } catch (error) {
-//         console.error('Unable to synchronize the database:', error);
-//     }
-// })();
-
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    store: store, 
+    store: store,
     cookie: {
-        secure: 'true'
+        secure: process.env.NODE_ENV === 'production', // Atur berdasarkan lingkungan
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000 // 1 hari
     }
 }));
 
 app.use(cors({
     credentials: true,
-    origin: 'https://perpustakaancahayasmpn1bpp.vercel.app'
+    origin: 'https://perpustakaancahayasmpn1bpp.vercel.app' // Sesuaikan dengan URL frontend
 }));
 
 app.use(express.json());
@@ -50,9 +42,25 @@ app.use(BookRoute);
 app.use(AuthRoute);
 app.use(MemberRoute);
 
+// Menyinkronkan tabel sesi
+store.sync();
 
-// store.sync();
+// Menambahkan middleware untuk error handling
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
 
 app.listen(process.env.APP_PORT, () => {
-    console.log('Server berjalan...');
+    console.log('Server berjalan pada port', process.env.APP_PORT);
 });
+
+
+// (async () => {
+//     try {
+//         await db.sync();
+//         console.log('Database synchronized!');
+//     } catch (error) {
+//         console.error('Unable to synchronize the database:', error);
+//     }
+// })();
