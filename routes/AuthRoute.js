@@ -4,8 +4,8 @@ import { verifyUser } from "../middleware/AuthUser.js";
 
 const router = express.Router();
 
-router.get('/me', verifyUser, Me); // Tambahkan verifyUser middleware
+router.get('/me', Me); // Tambahkan verifyUser middleware
 router.post('/login', Login);
-router.delete('/logout', verifyUser, logOut); // Tambahkan verifyUser middleware
+router.delete('/logout', logOut); // Tambahkan verifyUser middleware
 
 export default router;
