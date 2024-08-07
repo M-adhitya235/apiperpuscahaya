@@ -16,20 +16,6 @@ export const getUsers = async (req, res) => {
   }
 };
 
-// export const getUserProfile = async (req, res) => {
-//     try {
-//         const user = await User.findOne({
-//             where: {
-//                 id: req.userId
-//             },
-//             attributes: ['uuid', 'name', 'user_class', 'address', 'phone_number', 'email', 'role'] 
-//         });
-//         if (!user) return res.status(404).json({ msg: "User tidak ditemukan" });
-//         res.json(user);
-//     } catch (error) {
-//         res.status(500).json({ msg: error.message });
-//     }
-// };
 
 export const getUserById = async (req, res) => {
   try {

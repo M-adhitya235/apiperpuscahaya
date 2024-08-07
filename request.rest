@@ -9,6 +9,22 @@ Content-Type: application/json
     "role": "admin"
 }
 
+
+####
+POST https://apiperpussmpn1bppn.vercel.app/users
+Content-Type: application/json
+
+{
+    "name": "John Doe",
+    "user_class": "10A",
+    "address": "123 Street",
+    "phone_number": "1234567890",
+    "email": "johndoe@example.com",
+    "password": "password123",
+    "role": "user"
+}
+
+
 ####
 //User
 GET http://localhost:3000/users
