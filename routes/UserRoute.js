@@ -10,7 +10,7 @@ import { verifyToken, adminOnly } from "../middleware/AuthUser.js";
 
 const router = express.Router();
 
-router.get('/users', verifyToken, adminOnly, getUsers); 
+router.get('/users', verifyToken, getUsers); 
 router.get('/users/:id', verifyToken, adminOnly, getUserById);
 router.post('/users', createUser); 
 router.patch('/users/:id', verifyToken, adminOnly, updateUser);
