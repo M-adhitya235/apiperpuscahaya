@@ -5,7 +5,7 @@ import {
   updateMember,
   deleteMember
 } from "../controllers/Members.js";
-import { verifyToken } from "../middleware/AuthUser.js";
+import { verifyToken } from "../middleware/AuthUser.js"; 
 
 const router = express.Router();
 
