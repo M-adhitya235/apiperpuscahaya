@@ -11,7 +11,7 @@ import { adminOnly, verifyToken } from "../middleware/AuthUser.js";
 
 const router = express.Router();
 
-router.get('/books', verifyToken, getBooks);
+router.get('/books', getBooks);
 router.get('/books/:id', verifyToken, getBookById);
 router.get('/books/category/:category', verifyToken, getBooksByCategory);
 router.post('/books', verifyToken, adminOnly, createBook);
