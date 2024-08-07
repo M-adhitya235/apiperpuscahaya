@@ -1,46 +1,53 @@
 import User from "../models/UserModel.js";
 import argon2 from "argon2";
+import jwt from "jsonwebtoken";
 
-export const Login = async (req, res) =>{
+const JWT_SECRET = process.env.JWT_SECRET ; 
+
+export const Login = async (req, res) => {
     try {
-        const user = await User.findOne({
-            where: {
-                email: req.body.email
-            }
-        });
-        if(!user) return res.status(404).json({msg: "User tidak ditemukan"});
+        const user = await User.findOne({ where: { email: req.body.email } });
+        if (!user) return res.status(404).json({ msg: "User tidak ditemukan" });
+
         const match = await argon2.verify(user.password, req.body.password);
-        if(!match) return res.status(400).json({msg: "Wrong Password"});
-        req.session.userId = user.uuid;
-        console.log("Login successful, session userId:", req.session.userId);
-        const uuid = user.uuid;
-        const name = user.name;
-        const email = user.email;
-        const role = user.role;
-        res.status(200).json({uuid, name, email, role});
+        if (!match) return res.status(400).json({ msg: "Password salah" });
+
+        // Generate JWT token
+        const token = jwt.sign(
+            { uuid: user.uuid, role: user.role },
+            JWT_SECRET,
+            { expiresIn: '1h' } 
+        );
+
+        res.status(200).json({
+            token,
+            uuid: user.uuid,
+            name: user.name,
+            email: user.email,
+            role: user.role
+        });
     } catch (error) {
         console.error("Login error:", error);
-        res.status(500).json({msg: "Server error"});
+        res.status(500).json({ msg: "Server error" });
     }
-}
+};
 
-export const Me = async (req, res) =>{
-    if(!req.session.userId){
-        return res.status(401).json({msg: "Mohon login ke akun Anda!"});
+export const Me = async (req, res) => {
+    const { uuid } = req.user;  // Mendapatkan UUID dari token yang sudah didecode
+    try {
+        const user = await User.findOne({
+            attributes: ['uuid', 'name', 'email', 'role'],
+            where: { uuid }
+        });
+        if (!user) return res.status(404).json({ msg: "User tidak ditemukan" });
+        res.status(200).json(user);
+    } catch (error) {
+        console.error("Error fetching user:", error);
+        res.status(500).json({ msg: "Server error" });
     }
-    const user = await User.findOne({
-        attributes:['uuid','name','email','role'],
-        where: {
-            uuid: req.session.userId
-        }
-    });
-    if(!user) return res.status(404).json({msg: "User tidak ditemukan"});
-    res.status(200).json(user);
-}
+};
 
-export const logOut = (req, res) =>{
-    req.session.destroy((err)=>{
-        if(err) return res.status(400).json({msg: "Tidak dapat logout"});
-        res.status(200).json({msg: "Anda telah logout"});
-    });
-}
+export const logOut = (req, res) => {
+    // Dengan JWT, logout biasanya hanya berarti menghapus token di sisi klien
+    res.status(200).json({ msg: "Anda telah logout" });
+};

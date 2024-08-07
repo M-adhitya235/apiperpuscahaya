@@ -27,7 +27,7 @@ app.use(session({
     saveUninitialized: true,
     store: store,
     cookie: {
-        secure: process.env.NODE_ENV === 'production',
+        secure: process.env.NODE_ENV === 'production', // Secure cookies in production
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000 // 1 day
     }
@@ -38,7 +38,7 @@ app.set('trust proxy', 1);
 
 app.use(cors({
     credentials: true,
-    origin: 'https://perpustakaancahayasmpn1bpp.vercel.app' 
+    origin: 'https://perpustakaancahayasmpn1bpp.vercel.app' // Pastikan ini menggunakan https
 }));
 
 app.use(express.json());

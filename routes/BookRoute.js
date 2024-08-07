@@ -7,15 +7,15 @@ import {
     updateBook,
     deleteBook
 } from "../controllers/Books.js";
-import { adminOnly, verifyUser } from "../middleware/AuthUser.js";
+import { adminOnly, verifyToken } from "../middleware/AuthUser.js";
 
 const router = express.Router();
 
-router.get('/books', getBooks);
-router.get('/books/:id',getBookById);
-router.get('/books/category/:category', getBooksByCategory);
-router.post('/books',verifyUser, adminOnly, createBook);
-router.patch('/books/:id',verifyUser, updateBook);
-router.delete('/books/:id',verifyUser, deleteBook);
+router.get('/books', verifyToken, getBooks);
+router.get('/books/:id', verifyToken, getBookById);
+router.get('/books/category/:category', verifyToken, getBooksByCategory);
+router.post('/books', verifyToken, adminOnly, createBook);
+router.patch('/books/:id', verifyToken, updateBook);
+router.delete('/books/:id', verifyToken, deleteBook);
 
 export default router;

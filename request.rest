@@ -1,8 +1,8 @@
-POST http://localhost:3000/users
+POST https://apiperpussmpn1bppn.vercel.app/users
 Content-Type: application/json
 
 {
-    "name": "adit",
+    "name": "edis",
     "email": "admin@gmail.com",
     "password": "123456",
     "confPassword": "123456",
@@ -53,7 +53,7 @@ DELETE http://localhost:3000/users/fb9d4ae0-001d-4f73-93c7-66df02c95a76
 
 ####
 //Userlogin
-POST http://localhost:3000/login
+POST https://apiperpussmpn1bppn.vercel.app/login
 Content-Type: application/json
 
 {

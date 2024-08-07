@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import User from "../models/UserModel.js";
 import argon2 from "argon2";
 
-const JWT_SECRET = 'cahayaperpus'; 
+const JWT_SECRET = process.env.JWT_SECRET; // Menggunakan variabel dari file .env
 
 export const getUsers = async (req, res) => {
   try {
@@ -19,7 +19,6 @@ export const getUsers = async (req, res) => {
   }
 };
 
-
 export const getUserById = async (req, res) => {
   try {
     const response = await User.findOne({
@@ -35,11 +34,10 @@ export const getUserById = async (req, res) => {
   }
 };
 
-
 export const createUser = async (req, res) => {
   const { name, user_class, address, phone_number, email, password, confPassword, role } = req.body;
   if (password !== confPassword) return res.status(400).json({ msg: "Password dan Confirm Password tidak cocok" });
-  
+
   try {
     const hashPassword = await argon2.hash(password);
     const user = await User.create({
@@ -49,7 +47,7 @@ export const createUser = async (req, res) => {
       phone_number,
       email,
       password: hashPassword,
-      role,  
+      role,
     });
 
     // Generate JWT token
@@ -61,7 +59,7 @@ export const createUser = async (req, res) => {
 
     res.status(201).json({
       msg: "Register Berhasil",
-      token 
+      token
     });
   } catch (error) {
     res.status(400).json({ msg: error.message });
@@ -105,7 +103,6 @@ export const updateUser = async (req, res) => {
     res.status(400).json({ msg: error.message });
   }
 };
-
 
 export const deleteUser = async (req, res) => {
   const user = await User.findOne({

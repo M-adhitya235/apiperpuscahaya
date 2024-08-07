@@ -88,7 +88,6 @@ export const getBookById = async (req, res) => {
     }
 }
 
-
 export const createBook = async (req, res) => {
     const { name, pengarang, penerbit, isbn, kategori, sumber, noinduk, nopengenal, bahasa, link } = req.body;
     if (!pengarang) {
