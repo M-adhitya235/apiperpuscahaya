@@ -1,56 +1,39 @@
-import jwt from 'jsonwebtoken';
 import User from "../models/UserModel.js";
-import dotenv from 'dotenv';
-
-dotenv.config(); // Memuat variabel dari .env
 
 export const verifyUser = async (req, res, next) => {
     console.log("Verifying user...");
+    console.log(`Session userId: ${req.session.userId}`);
+    if (!req.session.userId) {
+        return res.status(401).json({ msg: "Mohon login ke akun Anda!" });
+    }
 
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1]; // Ambil token dari header Authorization
-    
-    if (token == null) return res.status(401).json({ msg: "Token tidak ditemukan" });
-
-    jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
-        if (err) return res.status(403).json({ msg: "Token tidak valid" });
-
-        // Verifikasi pengguna di database (opsional, tergantung pada kebutuhan Anda)
-        const dbUser = await User.findOne({
+    try {
+        const user = await User.findOne({
             where: {
-                uuid: user.id 
+                uuid: req.session.userId
             }
         });
-
-        if (!dbUser) return res.status(404).json({ msg: "User tidak ditemukan" });
-
-        req.user = dbUser; // Tambahkan informasi pengguna ke objek request
-        req.role = dbUser.role;
-        console.log(`User verified: ${dbUser.role}`);
+        
+        if (!user) return res.status(404).json({ msg: "User tidak ditemukan" });
+        
+        req.userId = user.id;
+        req.role = user.role;
+        console.log(`User verified: ${user.role}`);
         next();
-    });
+    } catch (error) {
+        console.error("Error verifying user:", error);
+        res.status(500).json({ msg: "Terjadi kesalahan server" });
+    }
 };
+
 
 export const adminOnly = async (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1]; // Ambil token dari header Authorization
-    
-    if (token == null) return res.status(401).json({ msg: "Token tidak ditemukan" });
-
-    jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
-        if (err) return res.status(403).json({ msg: "Token tidak valid" });
-
-        // Verifikasi pengguna di database
-        const dbUser = await User.findOne({
-            where: {
-                uuid: user.id // Gunakan ID dari token
-            }
-        });
-
-        if (!dbUser) return res.status(404).json({ msg: "User tidak ditemukan" });
-        if (dbUser.role !== "admin") return res.status(403).json({ msg: "Akses terlarang" });
-
-        req.user = dbUser; // Tambahkan informasi pengguna ke objek request
-        next();
+    const user = await User.findOne({
+        where: {
+            uuid: req.session.userId
+        }
     });
-};
+    if(!user) return res.status(404).json({msg: "User tidak ditemukan"});
+    if(user.role !== "admin") return res.status(403).json({msg: "Akses terlarang"});
+    next();
+}
