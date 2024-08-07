@@ -11,8 +11,8 @@ import { adminOnly, verifyUser } from "../middleware/AuthUser.js";
 
 const router = express.Router();
 
-router.get('/books',verifyUser, getBooks);
-router.get('/books/:id',verifyUser, getBookById);
+router.get('/books', getBooks);
+router.get('/books/:id',getBookById);
 router.get('/books/category/:category', getBooksByCategory);
 router.post('/books',verifyUser, adminOnly, createBook);
 router.patch('/books/:id',verifyUser, updateBook);
