@@ -12,26 +12,29 @@ import db from "./config/Database.js";
 dotenv.config();
 
 const app = express();
+const SequelizeStoreInstance = SequelizeStore(session.Store);
 
-const sessionStore = SequelizeStore(session.Store);
-
-const store = new sessionStore({
+const store = new SequelizeStoreInstance({
     db: db
 });
+
+// Sinkronisasi tabel sesi sebelum menggunakan rute
+store.sync();
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    store: new SequelizeStore({
-        db: sequelize,
-    }),
+    store: store,
     cookie: {
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000 // 1 day
     }
 }));
+
+// Jika menggunakan proxy seperti Vercel
+app.set('trust proxy', 1);
 
 app.use(cors({
     credentials: true,
@@ -44,10 +47,7 @@ app.use(BookRoute);
 app.use(AuthRoute);
 app.use(MemberRoute);
 
-// Menyinkronkan tabel sesi
-store.sync();
-
-// Menambahkan middleware untuk error handling
+// Middleware untuk error handling
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something broke!');
@@ -56,13 +56,3 @@ app.use((err, req, res, next) => {
 app.listen(process.env.APP_PORT, () => {
     console.log('Server berjalan pada port', process.env.APP_PORT);
 });
-
-
-// (async () => {
-//     try {
-//         await db.sync();
-//         console.log('Database synchronized!');
-//     } catch (error) {
-//         console.error('Unable to synchronize the database:', error);
-//     }
-// })();
