@@ -23,11 +23,13 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
-    store: store,
+    store: new SequelizeStore({
+        db: sequelize,
+    }),
     cookie: {
-        secure: process.env.NODE_ENV === 'production', 
+        secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000 
+        maxAge: 24 * 60 * 60 * 1000 // 1 day
     }
 }));
 

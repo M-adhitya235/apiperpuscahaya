@@ -2,20 +2,26 @@ import User from "../models/UserModel.js";
 import argon2 from "argon2";
 
 export const Login = async (req, res) =>{
-    const user = await User.findOne({
-        where: {
-            email: req.body.email
-        }
-    });
-    if(!user) return res.status(404).json({msg: "User tidak ditemukan"});
-    const match = await argon2.verify(user.password, req.body.password);
-    if(!match) return res.status(400).json({msg: "Wrong Password"});
-    req.session.userId = user.uuid;
-    const uuid = user.uuid;
-    const name = user.name;
-    const email = user.email;
-    const role = user.role;
-    res.status(200).json({uuid, name, email, role});
+    try {
+        const user = await User.findOne({
+            where: {
+                email: req.body.email
+            }
+        });
+        if(!user) return res.status(404).json({msg: "User tidak ditemukan"});
+        const match = await argon2.verify(user.password, req.body.password);
+        if(!match) return res.status(400).json({msg: "Wrong Password"});
+        req.session.userId = user.uuid;
+        console.log("Login successful, session userId:", req.session.userId);
+        const uuid = user.uuid;
+        const name = user.name;
+        const email = user.email;
+        const role = user.role;
+        res.status(200).json({uuid, name, email, role});
+    } catch (error) {
+        console.error("Login error:", error);
+        res.status(500).json({msg: "Server error"});
+    }
 }
 
 export const Me = async (req, res) =>{
