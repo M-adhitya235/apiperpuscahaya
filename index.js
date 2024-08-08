@@ -21,8 +21,8 @@ const store = new SequelizeStoreInstance({
 // Sinkronisasi tabel sesi sebelum menggunakan rute
 store.sync();
 
-// Sinkronisasi model lain seperti Users
-db.sync({ alter: true }) // Gunakan `alter: true` untuk memperbarui tabel sesuai dengan model
+// // Sinkronisasi model lain seperti Users
+db.sync({ alter: true }) 
     .then(() => {
         console.log('Database synchronized successfully.');
     })
@@ -42,7 +42,7 @@ app.use(session({
     }
 }));
 
-// Jika menggunakan proxy seperti Vercel
+
 app.set('trust proxy', 1);
 
 app.use(cors({

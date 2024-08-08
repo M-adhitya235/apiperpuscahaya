@@ -23,9 +23,7 @@ const Users = db.define('users', {
     user_class: {
         type: DataTypes.STRING,
         allowNull: true, 
-        validate: {
-            len: [1, 50]
-        }
+        
     },
     address: {
         type: DataTypes.STRING,
