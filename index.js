@@ -21,7 +21,7 @@ const store = new SequelizeStoreInstance({
 // Sinkronisasi tabel sesi sebelum menggunakan rute
 store.sync();
 
-// Sinkronisasi model database
+// Sinkronisasi model
 // db.sync({ alter: true }) 
 //     .then(() => {
 //         console.log('Database synchronized successfully.');
@@ -33,12 +33,12 @@ store.sync();
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     store: store,
     cookie: {
-        secure: true, 
-        httpOnly: true, 
-        maxAge: 24 * 60 * 60 * 1000 
+        secure: process.env.NODE_ENV === 'production', // Secure cookies in production
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000 // 1 day
     }
 }));
 
