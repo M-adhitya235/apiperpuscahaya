@@ -33,12 +33,12 @@ store.sync();
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false, // Hanya simpan sesi setelah data diatur
     store: store,
     cookie: {
-        secure: process.env.NODE_ENV === 'production', // Secure cookies in production
+        secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000 // 1 day
+        maxAge: 24 * 60 * 60 * 1000 // 1 hari
     }
 }));
 
