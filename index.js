@@ -21,24 +21,24 @@ const store = new SequelizeStoreInstance({
 // Sinkronisasi tabel sesi sebelum menggunakan rute
 store.sync();
 
-// // Sinkronisasi model lain seperti Users
-db.sync({ alter: true }) 
-    .then(() => {
-        console.log('Database synchronized successfully.');
-    })
-    .catch((error) => {
-        console.error('Error syncing database:', error);
-    });
+// Sinkronisasi model database
+// db.sync({ alter: true }) 
+//     .then(() => {
+//         console.log('Database synchronized successfully.');
+//     })
+//     .catch((error) => {
+//         console.error('Error syncing database:', error);
+//     });
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     store: store,
     cookie: {
-        secure: process.env.NODE_ENV === 'production', // Secure cookies in production
-        httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000 // 1 day
+        secure: true, 
+        httpOnly: true, 
+        maxAge: 24 * 60 * 60 * 1000 
     }
 }));
 
