@@ -2,11 +2,11 @@ POST https://apiperpussmpn1bppn.vercel.app/users
 Content-Type: application/json
 
 {
-    "name": "andin",
-    "email": "andin@gmail.com",
-    "password": "andin12",
-    "confPassword": "andin12",
-    "role": "user"
+    "name": "aditch",
+    "email": "admin@gmail.com",
+    "password": "adminisadmin",
+    "confPassword": "adminisadmin",
+    "role": "admin"
 }
 
 

@@ -21,6 +21,15 @@ const store = new SequelizeStoreInstance({
 // Sinkronisasi tabel sesi sebelum menggunakan rute
 store.sync();
 
+// Sinkronisasi model lain seperti Users
+db.sync({ alter: true }) // Gunakan `alter: true` untuk memperbarui tabel sesuai dengan model
+    .then(() => {
+        console.log('Database synchronized successfully.');
+    })
+    .catch((error) => {
+        console.error('Error syncing database:', error);
+    });
+
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,

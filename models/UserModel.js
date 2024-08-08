@@ -30,17 +30,12 @@ const Users = db.define('users', {
     address: {
         type: DataTypes.STRING,
         allowNull: true, 
-        validate: {
-            len: [1, 255] 
-        }
+        
     },
     phone_number: {
         type: DataTypes.STRING,
         allowNull: true,
-        validate: {
-            isNumeric: true, 
-            len: [6, 20]
-        }
+        
     },
     email: {
         type: DataTypes.STRING,
