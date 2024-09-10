@@ -46,7 +46,7 @@ app.use(session({
 app.set('trust proxy', 1);
 
 app.use(cors({
-    credentials: true,
+    
     origin: 'https://perpustakaancahayasmpn1bpp.vercel.app',
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
