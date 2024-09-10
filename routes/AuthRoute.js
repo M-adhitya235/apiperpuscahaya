@@ -4,11 +4,9 @@ import { verifyToken } from "../middleware/AuthUser.js";
 
 const router = express.Router();
 
-//
-router.get('/me', verifyToken, Me); // Gunakan verifyToken untuk memverifikasi token
-router.delete('/logout', verifyToken, logOut); // Gunakan verifyToken untuk memverifikasi token
 
-// Rute login yang tidak memerlukan autentikasi
+router.get('/me', verifyToken, Me); 
+router.delete('/logout', verifyToken, logOut); 
 router.post('/login', Login);
 
 export default router;

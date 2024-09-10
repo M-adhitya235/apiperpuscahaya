@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import User from "../models/UserModel.js";
 import argon2 from "argon2";
 
-const JWT_SECRET = process.env.JWT_SECRET; // Menggunakan variabel dari file .env
+const JWT_SECRET = process.env.JWT_SECRET; 
 
 export const getUsers = async (req, res) => {
   try {
