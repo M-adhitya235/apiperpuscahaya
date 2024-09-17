@@ -4,7 +4,7 @@ export const getMembers = async (req, res) => {
     try {
         const user = await User.findOne({
             where: {
-                id: req.userId
+                uuid: req.userId
             },
             attributes: ['uuid', 'name', 'user_class', 'address', 'phone_number', 'email', 'role']
         });

@@ -22,13 +22,13 @@ const store = new SequelizeStoreInstance({
 store.sync();
 
 // Sinkronisasi model database
-db.sync({ alter: true }) 
-    .then(() => {
-        console.log('Database synchronized successfully.');
-    })
-    .catch((error) => {
-        console.error('Error syncing database:', error);
-    });
+// db.sync({ alter: true }) 
+//     .then(() => {
+//         console.log('Database synchronized successfully.');
+//     })
+//     .catch((error) => {
+//         console.error('Error syncing database:', error);
+//     });
 
 app.use(session({
     secret: process.env.SESSION_SECRET,
