@@ -2,10 +2,10 @@ POST https://apiperpussmpn1bppn.vercel.app/users
 Content-Type: application/json
 
 {
-    "name": "aditch",
-    "email": "admin@gmail.com",
-    "password": "adminisadmin",
-    "confPassword": "adminisadmin",
+    "name": "adit",
+    "email": "admin2@gmail.com",
+    "password": "admin123",
+    "confPassword": "admin123",
     "role": "admin"
 }
 
@@ -57,8 +57,8 @@ POST https://apiperpussmpn1bppn.vercel.app/login
 Content-Type: application/json
 
 {
-    "email": "admin@gmail.com",
-    "password": "123456"
+    "email": "admin2@gmail.com",
+    "password": "admin123"
 }
 
 ####
