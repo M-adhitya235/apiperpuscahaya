@@ -33,7 +33,7 @@ export const Login = async (req, res) => {
 };
 
 export const Me = async (req, res) => {
-    const { uuid } = req.user;  
+    const { uuid } = req.user;  // Mendapatkan UUID dari token yang sudah didecode
     try {
         const user = await User.findOne({
             attributes: ['uuid', 'name', 'email', 'role'],
@@ -48,6 +48,6 @@ export const Me = async (req, res) => {
 };
 
 export const logOut = (req, res) => {
-   
+    // Dengan JWT, logout biasanya hanya berarti menghapus token di sisi klien
     res.status(200).json({ msg: "Anda telah logout" });
 };
