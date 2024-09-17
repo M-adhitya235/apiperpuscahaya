@@ -4,10 +4,7 @@ import { Op } from "sequelize";
 
 export const getBooks = async (req, res) => {
     try {
-        let response;
-        let totalBuku, totalKategori;
-
-        response = await Books.findAll({
+        const response = await Books.findAll({
             attributes: ['uuid', 'name', 'pengarang', 'penerbit', 'isbn', 'kategori', 'sumber', 'noinduk', 'nopengenal', 'bahasa', 'link'],
             include: [{
                 model: User,
@@ -15,8 +12,8 @@ export const getBooks = async (req, res) => {
             }]
         });
 
-        totalBuku = await Books.count();
-        totalKategori = await Books.count({
+        const totalBuku = await Books.count();
+        const totalKategori = await Books.count({
             distinct: true,
             col: 'kategori'
         });
@@ -53,36 +50,20 @@ export const getBooksByCategory = async (req, res) => {
 export const getBookById = async (req, res) => {
     try {
         const book = await Books.findOne({
+            attributes: ['uuid', 'name', 'pengarang', 'penerbit', 'isbn', 'kategori', 'sumber', 'noinduk', 'nopengenal', 'bahasa', 'link'],
             where: {
                 uuid: req.params.id
-            }
+            },
+            include: [{
+                model: User,
+                attributes: ['name', 'email']
+            }]
         });
         if (!book) return res.status(404).json({ msg: "Data tidak ditemukan" });
-        let response;
-        if (req.role === "admin") {
-            response = await Books.findOne({
-                attributes: ['uuid', 'name', 'pengarang', 'penerbit', 'isbn', 'kategori', 'sumber', 'noinduk', 'nopengenal', 'bahasa', 'link'],
-                where: {
-                    id: book.id
-                },
-                include: [{
-                    model: User,
-                    attributes: ['name', 'email']
-                }]
-            });
-        } else {
-            response = await Books.findOne({
-                attributes: ['uuid', 'name', 'pengarang', 'penerbit', 'isbn', 'kategori', 'sumber', 'noinduk', 'nopengenal', 'bahasa', 'link'],
-                where: {
-                    [Op.and]: [{ id: book.id }, { userId: req.userId }]
-                },
-                include: [{
-                    model: User,
-                    attributes: ['name', 'email']
-                }]
-            });
+        if (req.role !== "admin" && req.userId !== book.userId) {
+            return res.status(403).json({ msg: "Akses terlarang" });
         }
-        res.status(200).json(response);
+        res.status(200).json(book);
     } catch (error) {
         res.status(500).json({ msg: error.message });
     }
@@ -122,21 +103,16 @@ export const updateBook = async (req, res) => {
         });
         if (!book) return res.status(404).json({ msg: "Data tidak ditemukan" });
         const { name, pengarang, penerbit, isbn, kategori, sumber, noinduk, nopengenal, bahasa, link } = req.body;
-        if (req.role === "admin") {
+        if (req.role === "admin" || req.userId === book.userId) {
             await Books.update({ name, pengarang, penerbit, isbn, kategori, sumber, noinduk, nopengenal, bahasa, link }, {
                 where: {
-                    id: book.id
+                    uuid: req.params.id
                 }
             });
+            res.status(200).json({ msg: "Book updated successfully" });
         } else {
-            if (req.userId !== book.userId) return res.status(403).json({ msg: "Akses terlarang" });
-            await Books.update({ name, pengarang, penerbit, isbn, kategori, sumber, noinduk, nopengenal, bahasa, link }, {
-                where: {
-                    [Op.and]: [{ id: book.id }, { userId: req.userId }]
-                }
-            });
+            res.status(403).json({ msg: "Akses terlarang" });
         }
-        res.status(200).json({ msg: "Book updated successfully" });
     } catch (error) {
         res.status(500).json({ msg: error.message });
     }
@@ -150,21 +126,16 @@ export const deleteBook = async (req, res) => {
             }
         });
         if (!book) return res.status(404).json({ msg: "Data tidak ditemukan" });
-        if (req.role === "admin") {
+        if (req.role === "admin" || req.userId === book.userId) {
             await Books.destroy({
                 where: {
-                    id: book.id
+                    uuid: req.params.id
                 }
             });
+            res.status(200).json({ msg: "Book deleted successfully" });
         } else {
-            if (req.userId !== book.userId) return res.status(403).json({ msg: "Akses terlarang" });
-            await Books.destroy({
-                where: {
-                    [Op.and]: [{ id: book.id }, { userId: req.userId }]
-                }
-            });
+            res.status(403).json({ msg: "Akses terlarang" });
         }
-        res.status(200).json({ msg: "Book deleted successfully" });
     } catch (error) {
         res.status(500).json({ msg: error.message });
     }
