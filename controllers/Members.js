@@ -4,7 +4,7 @@ export const getMembers = async (req, res) => {
     try {
         const user = await User.findOne({
             where: {
-                uuid: req.userId
+                id: req.userId
             },
             attributes: ['uuid', 'name', 'user_class', 'address', 'phone_number', 'email', 'role']
         });
@@ -46,7 +46,8 @@ export const createMember = async (req, res) => {
 };
 
 export const updateMember = async (req, res) => {
-    console.log("Menerima permintaan PATCH dengan UUID:", req.params.id);
+    console.log("Menerima permintaan PATCH dengan ID:", req.params.id);
+    // Pastikan pengguna memiliki hak akses untuk mengupdate
     const member = await User.findOne({
         where: {
             uuid: req.params.id
@@ -56,7 +57,7 @@ export const updateMember = async (req, res) => {
     const { name, user_class, address, phone_number } = req.body;
     try {
         // Hanya admin yang dapat mengupdate member lain
-        if (req.role !== "admin" && req.userId !== member.uuid) {
+        if (req.role !== "admin" && req.userId !== member.id) {
             return res.status(403).json({ msg: "Akses terlarang" });
         }
         await User.update({
@@ -86,7 +87,7 @@ export const deleteMember = async (req, res) => {
     if (!member) return res.status(404).json({ msg: "Member tidak ditemukan" });
     try {
         // Hanya admin yang dapat menghapus member lain
-        if (req.role !== "admin" && req.userId !== member.uuid) {
+        if (req.role !== "admin" && req.userId !== member.id) {
             return res.status(403).json({ msg: "Akses terlarang" });
         }
         await User.destroy({

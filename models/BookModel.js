@@ -86,7 +86,7 @@ const Books = db.define('book', {
         }
     },
     userId: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
         validate: {
             notEmpty: true
